@@ -1,1 +1,14 @@
 https://github.com/nelsonBlack/nestjs-mysql-graphql-sequelize-typescript
+https://blog.logrocket.com/creating-scalable-graphql-api-mysql-apollo-node/
+https://www.udemy.com/course/nodejs-api-masterclass
+https://andela.com/insights/using-graphql-and-sequelize/
+https://juffalow.com/javascript/build-node-typescript-and-graphql-server-from-scratch
+https://www.digitalocean.com/community/tutorials/how-to-build-a-hashicorp-vault-server-using-packer-and-terraform-on-digitalocean-quickstart
+https://www.packer.io/guides/hcl/
+https://www.cloudbees.com/blog/packer-ansible
+https://betterprogramming.pub/how-to-create-a-signup-confirmation-email-with-node-js-c2fea602872a
+https://github.com/bezkoder/node-js-jwt-auth-mongodb
+https://github.com/bezkoder/react-hooks-jwt-auth
+https://www.toptal.com/nodejs/secure-rest-api-in-nodejs
+https://www.peerbits.com/blog/create-secure-rest-api-in-node-js.html
+https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/
