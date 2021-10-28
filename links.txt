@@ -1,0 +1,1 @@
+https://github.com/nelsonBlack/nestjs-mysql-graphql-sequelize-typescript
