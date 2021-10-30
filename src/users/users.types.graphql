@@ -1,0 +1,13 @@
+type Query {
+    getUsers: [User]
+    user(id: ID!): User
+}
+
+type User {
+    user_id: String!
+    rep: Int!
+    total_trans: Int!
+    mention_flag: Boolean!
+    twitch_id: String
+    bio: String
+}

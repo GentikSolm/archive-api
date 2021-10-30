@@ -1,0 +1,8 @@
+type Query {
+
+}
+
+type Action {
+    action_id: Id!
+    action_name: String!
+}
