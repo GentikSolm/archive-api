@@ -1,8 +1,0 @@
-type Query {
-    getGames(user: ID!): [Game]
-}
-
-type Game {
-    user_id: User!
-    game_name: String
-}

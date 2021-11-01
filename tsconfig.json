@@ -10,14 +10,14 @@
         "noImplicitAny": false,
         "removeComments": true,
         "noLib": false,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
         "target": "ES6",
         "sourceMap": true,
         "allowJs": true,
         "outDir": "./dist"
     },
-    "include": ["src/**/*"],
+    "include": [
+        "src/**/*"
+    ],
     "exclude": [
         "node_modules",
         "**/*.spec.ts"

@@ -1,9 +1,0 @@
-type Query {
-
-}
-
-type Tag {
-    user_id: User!
-    tag_name: String!
-    platform: String!
-}
