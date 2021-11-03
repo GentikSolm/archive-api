@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "ES7",
+            "DOM",
+            "ESNext.AsyncIterable"
+        ],
+        "module": "CommonJS",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "target": "ES6",
+        "sourceMap": true,
+        "allowJs": true,
+        "outDir": "./dist"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}
