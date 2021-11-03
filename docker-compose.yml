@@ -1,19 +1,22 @@
-version: '3.9'
+version: '3.8'
 services:
   api:
     build: .
-    volumes:
-      - ./env:/app/env
-  db:
-    image: 'mysql:latest'
-    environment:
-      - MYSQL_PASSWORD: "${DB_PASSWORD}"
-      - MYSQL_USER: "${DB_USERNAME}"
-      - MYSQL_DATABASE: "${DB_NAME}"
-    volumes:
-      - ./schema.sql:/schema.sql
-    command:
-      - "mysql -u ${MYSQL_USER} -p ${MYSQL_PASSWORD} ${MYSQL_DATABASE} < /schema.sql"
+    restart: on-failure:5
     ports:
-      - "3306:3306"
-
+      - "${PORT}:${PORT}"
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql 
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
