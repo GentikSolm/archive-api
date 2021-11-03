@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-core";
 
-export default gql`
+export const tagSchema = `
   type Tag {
     user_id: ID!
     tag_name: String!
@@ -11,3 +11,5 @@ export default gql`
     tags(user_id: ID!): [Tag!]
   }
 `
+
+export default gql`${tagSchema}`
