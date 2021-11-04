@@ -1,13 +1,10 @@
 name: CI/CD Needs
 on: [push]
 jobs:
-  checkout:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
   Lint:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '17'
@@ -16,6 +13,7 @@ jobs:
   Test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '17'
@@ -24,6 +22,7 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '17'
