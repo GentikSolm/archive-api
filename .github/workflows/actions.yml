@@ -5,18 +5,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-  setup-node:
+  Lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v2
         with:
           node-version: '17'
       - run: yarn
-  lint:
-    runs-on: ubuntu-latest
-    steps:
       - run: yarn lint
-  build-js:
+  Test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+      - run: yarn
+      - run: yarn test
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+      - run: yarn
       - run: yarn build:prod
