@@ -1,10 +1,10 @@
-import * as Sequelize from 'sequelize';
-import { DataTypes, Model, Optional } from 'sequelize';
-import type { games, gamesId } from './games';
-import type { tags, tagsId } from './tags';
-import type { transactions, transactionsId } from './transactions';
+import * as Sequelize from 'sequelize'
+import { DataTypes, Model, Optional } from 'sequelize'
+import type { games, gamesId } from './games'
+import type { tags, tagsId } from './tags'
+import type { transactions, transactionsId } from './transactions'
 
-export interface usersAttributes {
+export type usersAttributes = {
   user_id: string;
   rep: number;
   total_trans: number;
@@ -13,9 +13,9 @@ export interface usersAttributes {
   bio?: string;
 }
 
-export type usersPk = "user_id";
+export type usersPk = 'user_id';
 export type usersId = users[usersPk];
-export type usersOptionalAttributes = "user_id" | "total_trans" | "mention_flag" | "twitch_id" | "bio";
+export type usersOptionalAttributes = 'user_id' | 'total_trans' | 'mention_flag' | 'twitch_id' | 'bio';
 export type usersCreationAttributes = Optional<usersAttributes, usersOptionalAttributes>;
 
 export class users extends Model<usersAttributes, usersCreationAttributes> implements usersAttributes {
@@ -75,50 +75,50 @@ export class users extends Model<usersAttributes, usersCreationAttributes> imple
   hasSender_transactions!: Sequelize.HasManyHasAssociationsMixin<transactions, transactionsId>;
   countSender_transactions!: Sequelize.HasManyCountAssociationsMixin;
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof users {
+  static initModel (sequelize: Sequelize.Sequelize): typeof users {
     users.init({
-    user_id: {
-      type: DataTypes.STRING(45),
-      allowNull: false,
-      primaryKey: true
-    },
-    rep: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    total_trans: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    },
-    mention_flag: {
-      type: DataTypes.TINYINT,
-      allowNull: false,
-      defaultValue: 0
-    },
-    twitch_id: {
-      type: DataTypes.STRING(45),
-      allowNull: true
-    },
-    bio: {
-      type: DataTypes.STRING(512),
-      allowNull: true
-    }
-  }, {
-    sequelize,
-    tableName: 'users',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "user_id" },
-        ]
+      user_id: {
+        type: DataTypes.STRING(45),
+        allowNull: false,
+        primaryKey: true
       },
-    ]
-  });
-  return users;
+      rep: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      total_trans: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+      },
+      mention_flag: {
+        type: DataTypes.TINYINT,
+        allowNull: false,
+        defaultValue: 0
+      },
+      twitch_id: {
+        type: DataTypes.STRING(45),
+        allowNull: true
+      },
+      bio: {
+        type: DataTypes.STRING(512),
+        allowNull: true
+      }
+    }, {
+      sequelize,
+      tableName: 'users',
+      timestamps: false,
+      indexes: [
+        {
+          name: 'PRIMARY',
+          unique: true,
+          using: 'BTREE',
+          fields: [
+            { name: 'user_id' }
+          ]
+        }
+      ]
+    })
+    return users
   }
 }

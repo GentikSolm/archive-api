@@ -1,18 +1,16 @@
+import { httpServer } from './api/server'
+
 require('dotenv').config()
 
-import { start } from './api/server'
+process.on('uncaughtException', (err) => {
+  console.error('uncaughtException', err)
+  process.exit(0)
+})
 
-(async () => {
-  const port = process.env.PORT
+process.on('unhandledRejection', (err) => {
+  console.error('unhandledRejection', err)
+  process.exit(0)
+})
 
-  process.on('uncaughtException', (err) => {
-    console.error('uncaughtException', err)
-    process.exit(0)
-  })
-
-  process.on('unhandledRejection', (err) => {
-    console.error('unhandledRejection', err)
-    process.exit(0)
-  })
-  await start(port)
-})()
+httpServer.listen(process.env.PORT)
+console.log(`http://localhost:${process.env.PORT}`)
