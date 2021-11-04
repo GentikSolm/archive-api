@@ -2,17 +2,21 @@ name: CI/CD Needs
 on: [push]
 jobs:
   checkout:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
   setup-node:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v2
         with:
           node-version: '17'
       - run: yarn
   lint:
+    runs-on: ubuntu-latest
     steps:
       - run: yarn lint
   build-js:
+    runs-on: ubuntu-latest
     steps:
       - run: yarn build:prod
