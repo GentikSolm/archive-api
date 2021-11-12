@@ -23,6 +23,8 @@
     "express": "^4.17.1",
     "graphql": "^16.0.0",
     "graphql-tools": "^8.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "jwt": "^0.2.0",
     "mysql2": "^2.3.2",
     "sequelize": "^6.8.0",
     "sequelize-typescript": "^2.1.1"
