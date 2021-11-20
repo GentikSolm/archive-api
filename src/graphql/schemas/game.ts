@@ -1,6 +1,4 @@
-import { gql } from 'apollo-server-express'
-
-export const gameSchema = `
+export default `
   type Game {
     user_id: ID!
     game_name: String!
@@ -10,5 +8,3 @@ export const gameSchema = `
     games(user_id: ID!): [Game]
   }
 `
-
-export default gql`${gameSchema}`

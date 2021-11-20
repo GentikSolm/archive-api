@@ -1,6 +1,4 @@
-import { gql } from 'apollo-server-express'
-
-export const userSchema = `
+export default `
   type User {
       user_id: ID!
       rep: Int!
@@ -13,7 +11,7 @@ export const userSchema = `
   type Session {
     user_id: ID!
     token: String!
-    expiration: Int! 
+    expiration: Float! 
   }
 
   extend type Query {
@@ -22,5 +20,3 @@ export const userSchema = `
     login(user_id: ID!): Session
   }
 `
-
-export default gql`${userSchema}`

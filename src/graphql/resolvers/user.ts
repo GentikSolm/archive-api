@@ -8,7 +8,6 @@ export default {
       const _users = await users.findAll()
       return _users
     },
-
     async user (_, { user_id: userId }) {
       const _user = await users.findOne({ where: { user_id: userId } })
       console.log(_user)
@@ -28,7 +27,7 @@ export default {
         return {
           user_id: _user.user_id,
           token,
-          expiration: 60000
+          expiration: 1
         }
       }
     }
