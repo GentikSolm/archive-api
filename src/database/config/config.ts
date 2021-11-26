@@ -7,7 +7,10 @@ export default {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: 'mysql'
+    dialect: 'mysql',
+    dialectOptions: {
+      // Your mysql2 options here
+    }
   },
   test: {
     username: process.env.DB_USERNAME,
@@ -15,7 +18,10 @@ export default {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: 'mysql'
+    dialect: 'mysql',
+    dialectOptions: {
+      // Your mysql2 options here
+    }
   },
   production: {
     username: process.env.DB_USERNAME,
@@ -23,6 +29,9 @@ export default {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: 'mysql'
+    dialect: 'mysql',
+    dialectOptions: {
+      // Your mysql2 options here
+    }
   }
 }
