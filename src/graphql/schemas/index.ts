@@ -1,8 +1,6 @@
-import { gql } from 'apollo-server-express'
-
-import game from './game'
-import user from './user'
-import tag from './tag'
+import gameSchema from './game'
+import userSchema from './user'
+import tagSchema from './tag'
 
 export const rootSchema = `
   type Query {
@@ -10,6 +8,4 @@ export const rootSchema = `
   }
 `
 
-const rootType = gql`${rootSchema}`
-
-export default [rootType, game, tag, user]
+export default [rootSchema, gameSchema, userSchema, tagSchema]

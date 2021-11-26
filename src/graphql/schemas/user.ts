@@ -1,6 +1,4 @@
-import { gql } from 'apollo-server-express'
-
-export const userSchema = `
+export default `
   type User {
       user_id: ID!
       rep: Int!
@@ -8,12 +6,17 @@ export const userSchema = `
       mention_flag: Boolean!
       twitch_id: String
       bio: String
-    }
+  }
 
-    extend type Query {
-      users: [User!]
-      user(user_id: ID!): User
-    }
+  type Session {
+    user_id: ID!
+    token: String!
+    expiration: Float! 
+  }
+
+  extend type Query {
+    users: [User!]
+    user(user_id: ID!): User
+    login(user_id: ID!): Session
+  }
 `
-
-export default gql`${userSchema}`
