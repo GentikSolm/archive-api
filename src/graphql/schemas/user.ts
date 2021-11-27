@@ -4,8 +4,9 @@ export default `
       rep: Int!
       total_trans: Int!
       mention_flag: Boolean!
-      twitch_id: String
+      username: String
       bio: String
+      avatar: String
   }
 
   type Session {
@@ -18,5 +19,10 @@ export default `
     users: [User!]
     user(user_id: ID!): User
     login(user_id: ID!): Session
+  }
+
+  extend type Mutation {
+    curse(sender: ID!, receiver: ID!): User
+    thank(sender: ID!, receiver: ID!): User
   }
 `

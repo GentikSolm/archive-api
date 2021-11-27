@@ -5,9 +5,40 @@ const { games } = models
 export default {
   Query: {
     async games (_, { user_id: userId }) {
-      console.log(userId)
       const _games = await games.findAll({ where: { user_id: userId } })
       return _games
+    },
+  },
+  Mutation: {
+    async addGame (req, { user_id: userId, name }) {
+      if(!req.isAuth) {
+        throw new Error('Unauthenticated!')
+      }
+      const _game = await games.create({ game_name: name, user_id: userId })
+      return _game
+    },
+    async editGame (req, { user_id: userId, name }) {
+      if(!req.isAuth) {
+        throw new Error('Unauthenticated!')
+      }
+      const _game = await games.findOne({ where: { game_name: name, user_id: userId } })
+      if(!_game) {
+        throw new Error('Game not found!')
+      }
+      _game.game_name = name
+      _game.save()
+      return _game
+    },
+    async deleteGame (req, { user_id: userId, name }) {
+      if(!req.isAuth) {
+        throw new Error('Unauthenticated!')
+      }
+      const _game = await games.findOne({ where: { game_name: name, user_id: userId } })
+      if(!_game) {
+        throw new Error('Game not found!')
+      }
+      await _game.destroy()
+      return _game
     }
   }
 }
