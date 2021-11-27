@@ -4,11 +4,11 @@ const { users } = models
 
 export default {
   Query: {
-    async users () {
+    async users() {
       const _users = await users.findAll()
       return _users
     },
-    async user (_, { user_id: userId }) {
+    async user(_, { user_id: userId }) {
       const _user = await users.findOne({ where: { user_id: userId } })
       console.log(_user)
       if (!_user) {
@@ -29,6 +29,19 @@ export default {
           token,
           expiration: 1
         }
+      }
+    },
+  },
+  Mutation: {
+    async curse(req, { sender, receiver }) {
+      if (!req.isAuth) {
+        throw new Error('Unauthenticated!')
+      }
+    },
+
+    async thank(req, { sender, receiver }) {
+      if (!req.isAuth) {
+        throw new Error('Unauthenticated!')
       }
     }
   }

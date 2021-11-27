@@ -1,15 +1,15 @@
-import * as Sequelize from 'sequelize'
-import { DataTypes, Model, Optional } from 'sequelize'
-import type { users, usersId } from './users'
+import * as Sequelize from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
+import type { users, usersId } from './users';
 
-export type gamesAttributes = {
+export interface gamesAttributes {
   user_id: string;
   game_name: string;
 }
 
-export type gamesPk = 'user_id' | 'game_name';
+export type gamesPk = "user_id" | "game_name";
 export type gamesId = games[gamesPk];
-export type gamesOptionalAttributes = 'user_id' | 'game_name';
+export type gamesOptionalAttributes = "user_id" | "game_name";
 export type gamesCreationAttributes = Optional<gamesAttributes, gamesOptionalAttributes>;
 
 export class games extends Model<gamesAttributes, gamesCreationAttributes> implements gamesAttributes {
@@ -22,38 +22,38 @@ export class games extends Model<gamesAttributes, gamesCreationAttributes> imple
   setUser!: Sequelize.BelongsToSetAssociationMixin<users, usersId>;
   createUser!: Sequelize.BelongsToCreateAssociationMixin<users>;
 
-  static initModel (sequelize: Sequelize.Sequelize): typeof games {
+  static initModel(sequelize: Sequelize.Sequelize): typeof games {
     games.init({
-      user_id: {
-        type: DataTypes.STRING(45),
-        allowNull: false,
-        primaryKey: true,
-        references: {
-          model: 'users',
-          key: 'user_id'
-        }
-      },
-      game_name: {
-        type: DataTypes.STRING(45),
-        allowNull: false,
-        primaryKey: true
+    user_id: {
+      type: DataTypes.STRING(45),
+      allowNull: false,
+      primaryKey: true,
+      references: {
+        model: 'users',
+        key: 'user_id'
       }
-    }, {
-      sequelize,
-      tableName: 'games',
-      timestamps: false,
-      indexes: [
-        {
-          name: 'PRIMARY',
-          unique: true,
-          using: 'BTREE',
-          fields: [
-            { name: 'user_id' },
-            { name: 'game_name' }
-          ]
-        }
-      ]
-    })
-    return games
+    },
+    game_name: {
+      type: DataTypes.STRING(45),
+      allowNull: false,
+      primaryKey: true
+    }
+  }, {
+    sequelize,
+    tableName: 'games',
+    timestamps: false,
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "user_id" },
+          { name: "game_name" },
+        ]
+      },
+    ]
+  });
+  return games;
   }
 }

@@ -1,9 +1,9 @@
-import * as Sequelize from 'sequelize'
-import { DataTypes, Model, Optional } from 'sequelize'
-import type { actions, actionsId } from './actions'
-import type { users, usersId } from './users'
+import * as Sequelize from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
+import type { actions, actionsId } from './actions';
+import type { users, usersId } from './users';
 
-export type transactionsAttributes = {
+export interface transactionsAttributes {
   transaction_id: number;
   action_id: number;
   sender: string;
@@ -12,9 +12,9 @@ export type transactionsAttributes = {
   setrep_param?: number;
 }
 
-export type transactionsPk = 'transaction_id';
+export type transactionsPk = "transaction_id";
 export type transactionsId = transactions[transactionsPk];
-export type transactionsOptionalAttributes = 'transaction_id' | 'setrep_param';
+export type transactionsOptionalAttributes = "transaction_id" | "time" | "setrep_param";
 export type transactionsCreationAttributes = Optional<transactionsAttributes, transactionsOptionalAttributes>;
 
 export class transactions extends Model<transactionsAttributes, transactionsCreationAttributes> implements transactionsAttributes {
@@ -41,83 +41,85 @@ export class transactions extends Model<transactionsAttributes, transactionsCrea
   setSender_user!: Sequelize.BelongsToSetAssociationMixin<users, usersId>;
   createSender_user!: Sequelize.BelongsToCreateAssociationMixin<users>;
 
-  static initModel (sequelize: Sequelize.Sequelize): typeof transactions {
+  static initModel(sequelize: Sequelize.Sequelize): typeof transactions {
     transactions.init({
-      transaction_id: {
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true
-      },
-      action_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'actions',
-          key: 'action_id'
-        }
-      },
-      sender: {
-        type: DataTypes.STRING(45),
-        allowNull: false,
-        references: {
-          model: 'users',
-          key: 'user_id'
-        }
-      },
-      receiver: {
-        type: DataTypes.STRING(45),
-        allowNull: false,
-        references: {
-          model: 'users',
-          key: 'user_id'
-        }
-      },
-      time: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      setrep_param: {
-        type: DataTypes.INTEGER,
-        allowNull: true
+    transaction_id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
+    action_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'actions',
+        key: 'action_id'
       }
-    }, {
-      sequelize,
-      tableName: 'transactions',
-      timestamps: false,
-      indexes: [
-        {
-          name: 'PRIMARY',
-          unique: true,
-          using: 'BTREE',
-          fields: [
-            { name: 'transaction_id' }
-          ]
-        },
-        {
-          name: 'user_id_idx',
-          using: 'BTREE',
-          fields: [
-            { name: 'sender' },
-            { name: 'receiver' }
-          ]
-        },
-        {
-          name: 'receiver_idx',
-          using: 'BTREE',
-          fields: [
-            { name: 'receiver' }
-          ]
-        },
-        {
-          name: 'FK_action_actions_idx',
-          using: 'BTREE',
-          fields: [
-            { name: 'action_id' }
-          ]
-        }
-      ]
-    })
-    return transactions
+    },
+    sender: {
+      type: DataTypes.STRING(45),
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'user_id'
+      }
+    },
+    receiver: {
+      type: DataTypes.STRING(45),
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'user_id'
+      }
+    },
+    time: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    setrep_param: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    }
+  }, {
+    sequelize,
+    tableName: 'transactions',
+    hasTrigger: true,
+    timestamps: false,
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "transaction_id" },
+        ]
+      },
+      {
+        name: "user_id_idx",
+        using: "BTREE",
+        fields: [
+          { name: "sender" },
+          { name: "receiver" },
+        ]
+      },
+      {
+        name: "receiver_idx",
+        using: "BTREE",
+        fields: [
+          { name: "receiver" },
+        ]
+      },
+      {
+        name: "FK_action_actions_idx",
+        using: "BTREE",
+        fields: [
+          { name: "action_id" },
+        ]
+      },
+    ]
+  });
+  return transactions;
   }
 }
