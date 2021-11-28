@@ -9,7 +9,9 @@ export default {
       return _users
     },
     async pagedusers(_, { page, limit }) {
-      const _users = await users.findAll()
+      const _users = await users.findAll({
+        order: [['rep', 'DESC']]
+      })
       return _users.slice((page - 1) * limit, page * limit)
     },
     async user(_, { user_id: userId }) {
