@@ -19,10 +19,12 @@ export default `
     users: [User!]
     user(user_id: ID!): User
     login(user_id: ID!): Session
+    pagedusers(page: Int, limit: Int): [User!]
   }
 
   extend type Mutation {
     curse(sender: ID!, receiver: ID!): User
     thank(sender: ID!, receiver: ID!): User
+    editBio(user_id: ID!, bio: String!): User
   }
 `
