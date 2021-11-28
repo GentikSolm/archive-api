@@ -14,7 +14,11 @@ export default {
       if(!isAuth) {
         throw new Error('Unauthenticated!')
       }
-      const _game = await games.create({ game_name: name, user_id: userId })
+      let _game = await games.findOne({ where: { user_id: userId, game_name: name }})
+      if (_game) {
+        throw new Error('Game already exists!')
+      }
+      _game = await games.create({ game_name: name, user_id: userId })
       return _game
     },
     async editGame (_, { isAuth, user_id: userId, name }) {
