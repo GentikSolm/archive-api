@@ -8,9 +8,12 @@ export default {
       const _users = await users.findAll()
       return _users
     },
+    async pagedusers(_, { page, limit }) {
+      const _users = await users.findAll()
+      return _users.slice((page - 1) * limit, page * limit)
+    },
     async user(_, { user_id: userId }) {
       const _user = await users.findOne({ where: { user_id: userId } })
-      console.log(_user)
       if (!_user) {
         throw new Error('User not found')
       }
@@ -33,16 +36,27 @@ export default {
     },
   },
   Mutation: {
-    async curse(req, { sender, receiver }) {
-      if (!req.isAuth) {
+    async curse(_, { isAuth, sender, receiver }) {
+      if (!isAuth) {
         throw new Error('Unauthenticated!')
       }
     },
 
-    async thank(req, { sender, receiver }) {
-      if (!req.isAuth) {
+    async thank(_, { isAuth, sender, receiver }) {
+      if (!isAuth) {
         throw new Error('Unauthenticated!')
       }
+    },
+    async editBio(_, { isAuth, user_id: userId, bio }) {
+      if (!isAuth) {
+        throw new Error('Unauthenticated!')
+      }
+      const _user = await users.findOne({ where: { user_id: userId } })
+      if (!_user) {
+        throw new Error('User not found')
+      }
+      _user.bio = bio
+      _user.save()
     }
   }
 }

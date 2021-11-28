@@ -10,15 +10,15 @@ export default {
     },
   },
   Mutation: {
-    async addGame (req, { user_id: userId, name }) {
-      if(!req.isAuth) {
+    async addGame (_, { isAuth, user_id: userId, name }) {
+      if(!isAuth) {
         throw new Error('Unauthenticated!')
       }
       const _game = await games.create({ game_name: name, user_id: userId })
       return _game
     },
-    async editGame (req, { user_id: userId, name }) {
-      if(!req.isAuth) {
+    async editGame (_, { isAuth, user_id: userId, name }) {
+      if(!isAuth) {
         throw new Error('Unauthenticated!')
       }
       const _game = await games.findOne({ where: { game_name: name, user_id: userId } })
@@ -29,8 +29,8 @@ export default {
       _game.save()
       return _game
     },
-    async deleteGame (req, { user_id: userId, name }) {
-      if(!req.isAuth) {
+    async deleteGame (_, { isAuth, user_id: userId, name }) {
+      if(!isAuth) {
         throw new Error('Unauthenticated!')
       }
       const _game = await games.findOne({ where: { game_name: name, user_id: userId } })
