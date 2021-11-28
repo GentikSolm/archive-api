@@ -59,6 +59,7 @@ export default {
       }
       _user.bio = bio
       _user.save()
+      return _user
     }
   }
 }
