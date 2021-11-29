@@ -49,17 +49,21 @@ export default {
         throw new Error('Unauthenticated!')
       }
     },
-    async editBio(_, { isAuth, user_id: userId, bio }) {
-      if (!isAuth) {
-        throw new Error('Unauthenticated!')
-      }
-      const _user = await users.findOne({ where: { user_id: userId } })
-      if (!_user) {
-        throw new Error('User not found')
-      }
-      _user.bio = bio
-      _user.save()
-      return _user
+    async editBio(_, { user_id: userId, bio }) {
+        try{
+            let _user = await users.findOne({ where: { user_id: userId } })
+            if (!_user) {
+                throw new Error('User not found')
+            }
+            console.log("user" + _user)
+            _user.bio = bio
+            _user.save()
+            console.log(_user)
+            return _user
+        }
+        catch(e) {
+            throw e
+        }
     }
   }
 }

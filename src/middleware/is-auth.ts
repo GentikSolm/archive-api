@@ -2,29 +2,31 @@ import { verify } from 'jsonwebtoken'
 
 export default (req, res, next) => {
     const authHeader = req.get('Authorization')
+    let isAuth = true;
     if (!authHeader) {
-        req.isAuth = false
+        isAuth = false
         return next()
     }
     const token = authHeader.split(' ')[1]
     if (!token || token === '') {
-        req.isAuth = false
+        isAuth = false
         return next()
     }
     let decodedToken
     try {
         decodedToken = verify(token, process.env.JWT_SECRET)
     } catch (err) {
-        req.isAuth = false
+        isAuth = false
         return next()
     }
 
     if (!decodedToken) {
-        req.isAuth = false
+        isAuth = false
         return next()
     }
 
-    req.isAuth = true
-    req.userId = decodedToken.userId
-    next()
+    if(!isAuth) {
+        throw new Error("Unauthenticated!")
+    }
+    return next()
 }
