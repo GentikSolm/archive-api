@@ -34,6 +34,19 @@ export default {
       }
       await _game.destroy()
       return _game
+    },
+    async modifyGames (_, { user_id: userId, names }) {
+      const _games = await games.findAll({ where: { user_id: userId } })
+      await _games.forEach(async (game) => {
+        await game.destroy()
+      })
+
+      let newGames = []
+
+      names.forEach(async (gameName) => {
+        await newGames.push(games.create({ game_name: gameName, user_id: userId }))
+      })
+      return newGames
     }
   }
 }

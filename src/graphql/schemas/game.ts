@@ -12,5 +12,6 @@ export default `
     addGame(user_id: ID!, name: String!): Game
     editGame(user_id: ID!, name: String!): Game
     deleteGame(user_id: ID!, name: String!): Game
+    modifyGames(user_id: ID!, names: [String!]): [Game!]
   }
 `
