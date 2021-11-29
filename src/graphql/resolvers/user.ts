@@ -55,10 +55,8 @@ export default {
             if (!_user) {
                 throw new Error('User not found')
             }
-            console.log("user" + _user)
             _user.bio = bio
             _user.save()
-            console.log(_user)
             return _user
         }
         catch(e) {
