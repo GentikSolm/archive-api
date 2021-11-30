@@ -43,7 +43,7 @@ export default {
 
       let newGames = []
 
-      names.forEach(async (gameName) => {
+      await names.forEach(async (gameName) => {
         await newGames.push(games.create({ game_name: gameName, user_id: userId }))
       })
       return newGames
