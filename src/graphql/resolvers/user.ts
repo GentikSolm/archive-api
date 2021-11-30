@@ -1,6 +1,6 @@
 import { models } from '../../database/models/'
 import { sign } from 'jsonwebtoken'
-const { users } = models
+const { users, transactions } = models
 
 export default {
   Query: {
@@ -38,15 +38,116 @@ export default {
     },
   },
   Mutation: {
-    async curse(_, { isAuth, sender, receiver }) {
-      if (!isAuth) {
-        throw new Error('Unauthenticated!')
+    async curse(_, { sender, receiver }) {
+      try {
+        const _sender = await users.findOne({ where: { user_id: sender } })
+        if (!_sender) {
+          throw new Error('Sender not found')
+        }
+        const _receiver = await users.findOne({ where: { user_id: receiver } })
+        if (!_receiver) {
+          throw new Error('Receiver not found')
+        }
+        let rep
+        let transLimit
+        let repeatTime
+        let mesPerm
+        if (_sender.rep >= 100) {
+          rep = 3
+          transLimit = -1
+          repeatTime = 'MONTH'
+          mesPerm = true
+        } else if (_sender.rep >= 10) {
+          rep = 2
+          transLimit = 50
+          repeatTime = 'MONTH'
+          mesPerm = false
+        } else {
+          rep = 1
+          transLimit = 10
+          repeatTime = 'NEVER'
+          mesPerm = false
+        }
+        if(_sender.total_trans >= transLimit && transLimit !== -1) {
+          throw new Error("Transaction Limit Reached!")
+        }
+
+        if(repeatTime == 'NEVER')
+          throw new Error("Not Allowed To Repeat These Transactions Until A Higher Rank")
+        else if(repeatTime == 'MONTH') {
+          const currentTime = new Date(Date.now())
+          const lastTrans = await transactions.findOne({where: {sender, receiver}, order: [['time', 'DESC']]})
+          if(lastTrans.time.getMonth() - currentTime.getMonth() == 0) {
+            if(lastTrans.time.getDate() - currentTime.getDate() < 28) {
+              throw new Error("It's been Too Soon Since Last Interaction With This User.")
+            }
+          }
+        }
+
+        _receiver.rep -= rep
+
+        _receiver.save()
+
+        return _receiver
+      } catch(e) {
+        throw e
       }
     },
 
-    async thank(_, { isAuth, sender, receiver }) {
-      if (!isAuth) {
-        throw new Error('Unauthenticated!')
+    async thank(_, { sender, receiver }) {
+      try {
+        const _sender = await users.findOne({ where: { user_id: sender } })
+        if (!_sender) {
+          throw new Error('User not found')
+        }
+        const _receiver = await users.findOne({ where: { user_id: receiver } })
+        if (!_receiver) {
+          throw new Error('User not found')
+        }
+
+        let rep
+        let transLimit
+        let repeatTime
+        let mesPerm
+        if (_sender.rep >= 100) {
+          rep = 3
+          transLimit = -1
+          repeatTime = 'MONTH'
+          mesPerm = true
+        } else if (_sender.rep >= 10) {
+          rep = 2
+          transLimit = 50
+          repeatTime = 'MONTH'
+          mesPerm = false
+        } else {
+          rep = 1
+          transLimit = 10
+          repeatTime = 'NEVER'
+          mesPerm = false
+        }
+        if(_sender.total_trans >= transLimit && transLimit !== -1) {
+          throw new Error("Transaction Limit Reached!")
+        }
+
+        if(repeatTime == 'NEVER')
+          throw new Error("Not Allowed To Repeat These Transactions Until A Higher Rank")
+        else if(repeatTime == 'MONTH') {
+          const currentTime = new Date(Date.now())
+          const lastTrans = await transactions.findOne({where: {sender, receiver}, order: [['time', 'DESC']]})
+          if(lastTrans.time.getMonth() - currentTime.getMonth() == 0) {
+            if(lastTrans.time.getDate() - currentTime.getDate() < 28) {
+              throw new Error("It's been Too Soon Since Last Interaction With This User.")
+            }
+          }
+        }
+
+        _receiver.rep += rep
+
+        _receiver.save()
+
+        return _receiver
+      } catch(e) {
+        throw e
       }
     },
     async editBio(_, { user_id: userId, bio }) {
