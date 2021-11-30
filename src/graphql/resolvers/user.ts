@@ -38,15 +38,37 @@ export default {
     },
   },
   Mutation: {
-    async curse(_, { isAuth, sender, receiver }) {
-      if (!isAuth) {
-        throw new Error('Unauthenticated!')
+    async curse(_, { sender, receiver }) {
+      try {
+        const _sender = await users.findOne({ where: { user_id: sender } })
+        if (!_sender) {
+          throw new Error('User not found')
+        }
+        const _receiver = await users.findOne({ where: { user_id: receiver } })
+        if (!_receiver) {
+          throw new Error('User not found')
+        }
+
+        return _receiver
+      } catch(e) {
+        throw e
       }
     },
 
-    async thank(_, { isAuth, sender, receiver }) {
-      if (!isAuth) {
-        throw new Error('Unauthenticated!')
+    async thank(_, { sender, receiver }) {
+      try {
+        const _sender = await users.findOne({ where: { user_id: sender } })
+        if (!_sender) {
+          throw new Error('User not found')
+        }
+        const _receiver = await users.findOne({ where: { user_id: receiver } })
+        if (!_receiver) {
+          throw new Error('User not found')
+        }
+
+        return _receiver
+      } catch(e) {
+        throw e
       }
     },
     async editBio(_, { user_id: userId, bio }) {
