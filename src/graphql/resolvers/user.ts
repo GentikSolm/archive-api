@@ -77,17 +77,19 @@ export default {
         else if(repeatTime == 'MONTH') {
           const currentTime = new Date(Date.now())
           const lastTrans = await transactions.findOne({where: {sender, receiver}, order: [['time', 'DESC']]})
-          if(lastTrans.time.getMonth() - currentTime.getMonth() == 0) {
-            if(lastTrans.time.getDate() - currentTime.getDate() < 28) {
-              throw new Error("It's been Too Soon Since Last Interaction With This User.")
+          if(lastTrans) {
+            if(lastTrans.time.getMonth() - currentTime.getMonth() == 0) {
+              if(lastTrans.time.getDate() - currentTime.getDate() < 28) {
+                throw new Error("It's been Too Soon Since Last Interaction With This User.")
+              }
             }
           }
         }
 
         _receiver.rep -= rep
-
-        _receiver.save()
-
+        
+        await _receiver.save()
+        await transactions.create({ sender, receiver, action_id: 2 })
         return _receiver
       } catch(e) {
         throw e
@@ -134,16 +136,20 @@ export default {
         else if(repeatTime == 'MONTH') {
           const currentTime = new Date(Date.now())
           const lastTrans = await transactions.findOne({where: {sender, receiver}, order: [['time', 'DESC']]})
-          if(lastTrans.time.getMonth() - currentTime.getMonth() == 0) {
-            if(lastTrans.time.getDate() - currentTime.getDate() < 28) {
-              throw new Error("It's been Too Soon Since Last Interaction With This User.")
+          if(lastTrans) {
+            if(lastTrans.time.getMonth() - currentTime.getMonth() == 0) {
+              if(lastTrans.time.getDate() - currentTime.getDate() < 28) {
+                throw new Error("It's been Too Soon Since Last Interaction With This User.")
+              }
             }
           }
         }
 
         _receiver.rep += rep
 
-        _receiver.save()
+        await _receiver.save()
+
+        await transactions.create({ sender, receiver, action_id: 1 })
 
         return _receiver
       } catch(e) {
