@@ -38,8 +38,11 @@ export default {
     },
   },
   Mutation: {
-    async curse(_, { sender, receiver }) {
+    async curse(_, { sender, receiver }, {isAuth}) {
       try {
+        if (!isAuth) {
+          throw new Error('Unauthenticated')
+        }
         const _sender = await users.findOne({ where: { user_id: sender } })
         if (!_sender) {
           throw new Error('Sender not found')
@@ -72,11 +75,12 @@ export default {
           throw new Error("Transaction Limit Reached!")
         }
 
-        if(repeatTime == 'NEVER')
+        const lastTrans = await transactions.findOne({where: {sender, receiver}, order: [['time', 'DESC']]})
+
+        if(repeatTime == 'NEVER' && !lastTrans)
           throw new Error("Not Allowed To Repeat These Transactions Until A Higher Rank")
         else if(repeatTime == 'MONTH') {
           const currentTime = new Date(Date.now())
-          const lastTrans = await transactions.findOne({where: {sender, receiver}, order: [['time', 'DESC']]})
           if(lastTrans) {
             if(lastTrans.time.getMonth() - currentTime.getMonth() == 0) {
               if(lastTrans.time.getDate() - currentTime.getDate() < 28) {
@@ -96,15 +100,18 @@ export default {
       }
     },
 
-    async thank(_, { sender, receiver }) {
+    async thank(_, { sender, receiver }, {isAuth}) {
       try {
+        if (!isAuth) {
+          throw new Error('Unauthenticated')
+        }
         const _sender = await users.findOne({ where: { user_id: sender } })
         if (!_sender) {
-          throw new Error('User not found')
+          throw new Error('Sender not found')
         }
         const _receiver = await users.findOne({ where: { user_id: receiver } })
         if (!_receiver) {
-          throw new Error('User not found')
+          throw new Error('Receiver not found')
         }
 
         let rep
@@ -131,11 +138,12 @@ export default {
           throw new Error("Transaction Limit Reached!")
         }
 
-        if(repeatTime == 'NEVER')
+        const lastTrans = await transactions.findOne({where: {sender, receiver}, order: [['time', 'DESC']]})
+        
+        if(repeatTime == 'NEVER' && lastTrans)
           throw new Error("Not Allowed To Repeat These Transactions Until A Higher Rank")
         else if(repeatTime == 'MONTH') {
           const currentTime = new Date(Date.now())
-          const lastTrans = await transactions.findOne({where: {sender, receiver}, order: [['time', 'DESC']]})
           if(lastTrans) {
             if(lastTrans.time.getMonth() - currentTime.getMonth() == 0) {
               if(lastTrans.time.getDate() - currentTime.getDate() < 28) {
@@ -156,18 +164,21 @@ export default {
         throw e
       }
     },
-    async editBio(_, { user_id: userId, bio }) {
+    async editBio(_, { user_id: userId, bio }, {isAuth}) {
         try{
-            let _user = await users.findOne({ where: { user_id: userId } })
-            if (!_user) {
-                throw new Error('User not found')
-            }
-            _user.bio = bio
-            _user.save()
-            return _user
+          if (!isAuth) {
+            throw new Error('Not authenticated')
+          }
+          let _user = await users.findOne({ where: { user_id: userId } })
+          if (!_user) {
+              throw new Error('User not found')
+          }
+          _user.bio = bio
+          _user.save()
+          return _user
         }
         catch(e) {
-            throw e
+          throw e
         }
     }
   }

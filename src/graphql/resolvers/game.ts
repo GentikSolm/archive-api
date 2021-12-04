@@ -10,43 +10,71 @@ export default {
     },
   },
   Mutation: {
-    async addGame (_, { user_id: userId, name }) {
-      let _game = await games.findOne({ where: { user_id: userId, game_name: name }})
-      if (_game) {
-        throw new Error('Game already exists!')
+    async addGame (_, { user_id: userId, name }, { isAuth }) {
+      try {
+        if (!isAuth) {
+          throw new Error('Unauthenticated!')
+        }
+        let _game = await games.findOne({ where: { user_id: userId, game_name: name }})
+        if (_game) {
+          throw new Error('Game already exists!')
+        }
+        _game = await games.create({ game_name: name, user_id: userId })
+        return _game
+      } catch(e) {
+        throw e
       }
-      _game = await games.create({ game_name: name, user_id: userId })
-      return _game
     },
-    async editGame (_, { user_id: userId, name }) {
-      const _game = await games.findOne({ where: { game_name: name, user_id: userId } })
-      if(!_game) {
-        throw new Error('Game not found!')
+    async editGame (_, { user_id: userId, name }, { isAuth }) {
+      try {
+        if (!isAuth) {
+          throw new Error('Unauthenticated!')
+        }
+        const _game = await games.findOne({ where: { game_name: name, user_id: userId } })
+        if(!_game) {
+          throw new Error('Game not found!')
+        }
+        _game.game_name = name
+        _game.save()
+        return _game
+      } catch(e) {
+        throw e
       }
-      _game.game_name = name
-      _game.save()
-      return _game
     },
-    async deleteGame (_, { user_id: userId, name }) {
-      const _game = await games.findOne({ where: { game_name: name, user_id: userId } })
-      if(!_game) {
-        throw new Error('Game not found!')
+    async deleteGame (_, { user_id: userId, name }, { isAuth }) {
+      try {
+        if (!isAuth) {
+          throw new Error('Unauthenticated!')
+        }
+        const _game = await games.findOne({ where: { game_name: name, user_id: userId } })
+        if(!_game) {
+          throw new Error('Game not found!')
+        }
+        await _game.destroy()
+        return _game
+      } catch(e) {
+        throw e
       }
-      await _game.destroy()
-      return _game
     },
-    async modifyGames (_, { user_id: userId, names }) {
-      const _games = await games.findAll({ where: { user_id: userId } })
-      await _games.forEach(async (game) => {
-        await game.destroy()
-      })
+    async modifyGames (_, { user_id: userId, names }, { isAuth }) {
+      try {
+        if (!isAuth) {
+          throw new Error('Unauthenticated!')
+        }
+        const _games = await games.findAll({ where: { user_id: userId } })
+        await _games.forEach(async (game) => {
+          await game.destroy()
+        })
 
-      let newGames = []
+        let newGames = []
 
-      await names.forEach(async (gameName) => {
-        await newGames.push(games.create({ game_name: gameName, user_id: userId }))
-      })
-      return newGames
+        await names.forEach(async (gameName) => {
+          await newGames.push(games.create({ game_name: gameName, user_id: userId }))
+        })
+        return newGames
+      } catch(e) {
+        throw e
+      }
     }
   }
 }
